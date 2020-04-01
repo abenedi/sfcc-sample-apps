@@ -255,6 +255,52 @@ const removeItemFromBasket = async (
     return getBasket(config, context);
 };
 
+const submitCouponToBasket = async (couponCode: string, config: Config, context: AppContext) => {
+    const basketId = context.getSessionProperty('basketId');
+    if (!basketId) {
+        return {
+            fault: {
+                type: 'NoBasketCreated',
+                message: 'No Basket has been created yet.',
+            },
+        };
+    }
+
+    const basketClient = await getBasketClient(config, context);
+    return basketClient.addCouponToBasket({
+        parameters: {
+            basketId: basketId
+        },
+        body: {
+            code: couponCode,
+        },
+    }).catch(e => {
+        logger.error(`Error in submitCouponToBasket() for coupon code: ${couponCode}`);
+        throw e;
+    });;
+};
+
+const removeCouponFromBasket = async (couponItemId: string, config: Config, context: AppContext) => {
+    const basketId = context.getSessionProperty('basketId');
+    if (!basketId) {
+        return {
+            fault: {
+                type: 'NoBasketCreated',
+                message: 'No Basket has been created yet.',
+            },
+        };
+    }
+
+    const basketClient = await getBasketClient(config, context);
+
+    return basketClient.removeCouponFromBasket({
+        parameters: {
+            basketId: basketId,
+            couponItemId: couponItemId
+        },
+    })
+};
+
 export const basketResolver = (config: Config) => {
     return {
         Query: {
@@ -339,6 +385,40 @@ export const basketResolver = (config: Config) => {
                     context,
                 );
                 return new Basket(apiBasket);
+            },
+            submitCoupon: async (
+                _: never,
+                parameters: { couponCode: string },
+                context: AppContext,
+            ) => {
+                try {
+                    const apiBasket = await submitCouponToBasket(
+                        parameters.couponCode,
+                        config,
+                        context,
+                    );
+                    return new Basket(apiBasket);
+                } catch (e) {
+                    logger.error(`Error in basketResolvers(). ${e}`);
+                    throw e;
+                }
+            },
+            removeCoupon: async (
+                _: never,
+                parameters: { couponItemId: string },
+                context: AppContext,
+            ) => {
+                try {
+                    const apiBasket = await removeCouponFromBasket(
+                        parameters.couponItemId,
+                        config,
+                        context,
+                    );
+                    return new Basket(apiBasket);
+                } catch (e) {
+                    logger.error(`Error in basketResolvers(). ${e}`);
+                    throw e;
+                }
             },
         },
     };

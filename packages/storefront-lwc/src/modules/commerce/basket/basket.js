@@ -64,4 +64,9 @@ export default class Basket extends LightningElement {
                 console.error('error received ', error);
             });
     }
+
+    updateBasket(event) {
+        this.basket = {...this.basket, ...event.detail.updatedBasket};
+        ShoppingBasket.basket = {...ShoppingBasket.basket, ...this.basket};
+    }
 }

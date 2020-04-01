@@ -17,21 +17,22 @@ class Basket {
 
     isBasketLoaded = false;
 
-    getBasketAttributes = `basketId
-            customerId
-            getBasketMessage
-            totalProductsQuantity
-            shipmentId
-            shipmentTotal
-            selectedShippingMethodId
-            products {
-                productId
-                itemId
-                quantity
+    getBasketAttributes = `
+        basketId
+        customerId
+        getBasketMessage
+        totalProductsQuantity
+        shipmentId
+        shipmentTotal
+        selectedShippingMethodId
+        products {
+            productId
+            itemId
+            quantity
             productName
             price
             image
-        }
+            }
         orderTotal
         orderLevelPriceAdjustment {
             itemText
@@ -51,7 +52,13 @@ class Basket {
                 c_estimatedArrivalTime
                 c_storePickupEnabled
             }
-        }`;
+        }
+        couponItems {
+            code
+            couponItemId
+            statusCode
+        }
+    `;
 
     /**
      * Calling Add to the basket BFF.

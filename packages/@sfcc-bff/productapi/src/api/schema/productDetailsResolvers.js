@@ -24,17 +24,16 @@ const getProductClient = async (config, context) => {
 
 const getProductDetail = async (config, id, context) => {
     const productClient = await getProductClient(config, context);
-    return productClient
-        .getProduct({
-            parameters: {
-                id: id,
-                allImages: true,
-            },
-        })
-        .catch(e => {
-            logger.error(`Error in getClientProduct() for product ${id}`);
-            throw e;
-        });
+    return productClient.getProduct({
+        parameters: {
+            id: id,
+            allImages: true,
+        },
+    })
+    .catch(e => {
+        logger.error(`Error in getClientProduct() for product ${id}`);
+        throw e;
+    });
 };
 
 export const resolver = config => {
