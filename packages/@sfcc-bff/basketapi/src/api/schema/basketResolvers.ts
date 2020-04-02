@@ -78,6 +78,12 @@ const getBasketProductCount = async (config: Config, context: AppContext) => {
     return basketProductCount;
 };
 
+/**
+ * The maximum number of productIDs that can be requested are 24
+ * @param config
+ * @param context
+ * @param productIds
+ */
 const getProductsDetails = async (
     config: Config,
     context: AppContext,
