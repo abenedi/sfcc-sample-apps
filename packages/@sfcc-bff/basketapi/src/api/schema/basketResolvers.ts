@@ -76,7 +76,7 @@ const getBasketProductCount = async (config: Config, context: AppContext) => {
     }
 
     return basketProductCount;
-}
+};
 
 const getProductsDetails = async (
     config: Config,
